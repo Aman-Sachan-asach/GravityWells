@@ -38,9 +38,12 @@ public class ShipScript : MonoBehaviour
 
 	//other GameObjects
 	ObjectGeneratorScript ogs;
+	GameObject spaceStation;
 
 	//flags
 	bool flag_EnteredBlackholeType1 = false;
+	bool flag_dockingShip = false;
+	bool flag_stopPhysics = false;
 
 	// Use this for initialization
 	void Start () 
@@ -64,6 +67,10 @@ public class ShipScript : MonoBehaviour
 		else if(collider.CompareTag("SpaceStation"))
 		{
 			//Attach Ship to SpaceStation
+			spaceStation = collider.gameObject;
+
+			flag_stopPhysics = true;
+			flag_dockingShip = true;
 		}
 		else if(collider.CompareTag("Planet"))
 		{
@@ -90,6 +97,9 @@ public class ShipScript : MonoBehaviour
 		else if(collider.CompareTag("SpaceStation"))
 		{
 			//Give Boost to ship so it can relaunch
+
+			//continue using physics
+			flag_stopPhysics = false;
 		}
 		else
 		{
@@ -97,9 +107,10 @@ public class ShipScript : MonoBehaviour
 		}
 	}
 
-	// Update is called once per frame
-	void Update () 
-	{}
+	void DockShip ()
+	{
+		
+	}
 
 	void PlayerInput()
 	{
@@ -215,16 +226,28 @@ public class ShipScript : MonoBehaviour
 		state_predict_dot_force.z = 0.0f;
 	}
 
+	// Update is called once per frame
+	void Update () 
+	{
+		if (flag_dockingShip) 
+		{
+			DockShip ();
+		}
+	}
+
 	void FixedUpdate () 
 	{
 		resetValuesEveryTimestep ();
 
-		UpdateVelocity(); //velocity change due to blackholes and other objects in game
-		PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
-		RK2();
+		if (!flag_stopPhysics) 
+		{
+			UpdateVelocity(); //velocity change due to blackholes and other objects in game
+			PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
+			RK2();
 
-		//update position
-		position.y = positionalHeight;
-		gameObject.transform.position = position;
+			//update position
+			position.y = positionalHeight;
+			gameObject.transform.position = position;
+		}
     }
 }
