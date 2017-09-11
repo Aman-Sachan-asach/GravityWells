@@ -8,9 +8,21 @@ public class ShipScript : MonoBehaviour
 	public Vector3 velocity;
 	public float fuel;
 	public float mass;
+	public float drag;
+	float positionalHeight;
 
 	public Vector3 force; //the force applied every timestep to the ship that will produce some change in velocity every timestep
 
+	public float dT = 0.02f;
+	public Vector3 minVelocity;
+	public Vector3 maxVelocity;
+
+	//for dynamic control of ship
+	public float thrusterForceMagnitude;
+	public float rotationSpeed;
+	public float rotation;
+
+	//for RK2 integration
 	Vector3 state_pos;
 	Vector3 state_vel;
 	Vector3 state_force;
@@ -24,16 +36,6 @@ public class ShipScript : MonoBehaviour
 	Vector3 state_predict_dot_vel;
 	Vector3 state_predict_dot_force;
 
-	public float dT = 0.02f;
-	public Vector3 minVelocity;
-	public Vector3 maxVelocity;
-
-	//for dynamic control of ship
-	public Vector3 thrusterForce;
-	public float thrusterForceMagnitude;
-	public float rotationSpeed;
-	public float rotation;
-
 	//other GameObjects
 	ObjectGeneratorScript ogs;
 
@@ -44,6 +46,8 @@ public class ShipScript : MonoBehaviour
 	void Start () 
 	{
 		ogs = GameObject.Find("ObjectGenerator").GetComponent<ObjectGeneratorScript> ();
+
+		positionalHeight = transform.position.y;
 	}
 
 	void Die () 
@@ -59,11 +63,13 @@ public class ShipScript : MonoBehaviour
 		}
 		else if(collider.CompareTag("SpaceStation"))
 		{
-			//Make Ship Explode
+			//Attach Ship to SpaceStation
 		}
 		else if(collider.CompareTag("Planet"))
 		{
 			//Make Ship Explode
+			Destroy (gameObject);
+			//create an explosion effect here
 		}
 		else if(collider.CompareTag("Moon"))
 		{
@@ -83,7 +89,7 @@ public class ShipScript : MonoBehaviour
 		}
 		else if(collider.CompareTag("SpaceStation"))
 		{
-			//Attach Ship to SpaceStation
+			//Give Boost to ship so it can relaunch
 		}
 		else
 		{
@@ -97,8 +103,6 @@ public class ShipScript : MonoBehaviour
 
 	void PlayerInput()
 	{
-		//CHANGE TO NOT USE RIGIDBODY STUFF FOR MOVEMENT and GRAVITATIONAL stuff
-
 		//Getting current rotation if any
 		if (Input.GetAxisRaw("Horizontal") > 0)
 		{
@@ -120,10 +124,7 @@ public class ShipScript : MonoBehaviour
 		if (Input.GetAxisRaw("Vertical") > 0)
 		{
 			//Should use more fuel than rotation
-			//GetComponent<Rigidbody>().AddRelativeForce(thrusterForce);
-			Vector3 worldSpaceLookAtVec =  transform.forward;
-			//Debug.DrawLine(position, position+worldSpaceLookAtVec*10, Color.blue, 2.0f);
-			force += thrusterForceMagnitude*worldSpaceLookAtVec;
+			force += thrusterForceMagnitude*transform.forward;
 		}
 	}
 
@@ -137,12 +138,17 @@ public class ShipScript : MonoBehaviour
 
 			if (bhs.flag_InfluencingShip) 
 			{
-				force += bhs.applyForces (ref position, mass, dT);
-				//force += bhs.applyForcesUsingMomentum(ref position, ref velocity, dT);
+				force += bhs.applyForces (ref position, ref velocity, mass, dT);
 			}
 		}
 
 		velocity += (force/mass)*dT;
+		velocity = velocity * (1.0f - drag);
+
+		//clamp velocity
+		velocity.x = Mathf.Clamp(velocity.x, minVelocity.x, maxVelocity.x);
+		velocity.y = Mathf.Clamp(velocity.y, minVelocity.y, maxVelocity.y);
+		velocity.z = Mathf.Clamp(velocity.z, minVelocity.z, maxVelocity.z);
 	}
     
 	void computeDerivative(ref Vector3 statePos, ref Vector3 stateVel, ref Vector3 stateForce,
@@ -213,11 +219,12 @@ public class ShipScript : MonoBehaviour
 	{
 		resetValuesEveryTimestep ();
 
-		PlayerInput(); //maybe dont use rigidbody stuff of unity -- mariano's suggestion
 		UpdateVelocity(); //velocity change due to blackholes and other objects in game
+		PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
 		RK2();
 
 		//update position
+		position.y = positionalHeight;
 		gameObject.transform.position = position;
     }
 }

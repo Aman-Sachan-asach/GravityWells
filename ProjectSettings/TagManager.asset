@@ -6,9 +6,9 @@ TagManager:
   tags:
   - BlackholeType1
   - PlayerShip
-  - MoonType1
   - Moon
   - Planet
+  - SpaceStation
   layers:
   - Default
   - TransparentFX

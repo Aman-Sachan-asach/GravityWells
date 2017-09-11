@@ -244,7 +244,9 @@ MonoBehaviour:
   playerShip: {fileID: 1723455556968348, guid: 53882139bd0880043bbd543d4afeff4b, type: 2}
   blackholePrefab1: {fileID: 1901489544940212, guid: 04874d775f86ade47b3cb3a304d92b87,
     type: 2}
-  MoonPrefab1: {fileID: 1866565488664878, guid: 1b59803b44496854693c181d2660a9e9,
+  spaceStationPrefab1: {fileID: 1250034184122954, guid: ae98a3854c2f47b43808ceaf1e70732a,
+    type: 2}
+  moonPrefab1: {fileID: 1866565488664878, guid: 1b59803b44496854693c181d2660a9e9,
     type: 2}
   planetPrefab1: {fileID: 1963931221217794, guid: fb18ef25eafcb6e4ebc487888dcc70ae,
     type: 2}
@@ -278,6 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectGenerator: {fileID: 801995199}
+  scenario: 2
 --- !u!4 &1249269317
 Transform:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class GamePlayManagerScript : MonoBehaviour
 {
 	public GameObject objectGenerator;
 	ObjectGeneratorScript generatorScript;
+	public int scenario; //used to change the scene setup
 
 	// Use this for initialization
 	void Start () 
@@ -16,13 +17,10 @@ public class GamePlayManagerScript : MonoBehaviour
 
 	void InitializeObjectPositions()
 	{
-		generatorScript.generateBlackholes();
-		generatorScript.generatePlayerShip(new Vector3(30.0f, 0.25f, 25.0f));
+		generatorScript.generateAllObjectForScene(scenario);
 	}
 
 	// Update is called once per frame
 	void Update () 
-	{
-		
-	}
+	{}
 }
