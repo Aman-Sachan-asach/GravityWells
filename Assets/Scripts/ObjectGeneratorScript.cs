@@ -43,7 +43,6 @@ public class ObjectGeneratorScript : MonoBehaviour
 			Vector3 pos = new Vector3(-45.0f,0.0f,0.0f);
 			GameObject tempspaceStation = Instantiate (spaceStationPrefab1, pos, Quaternion.identity * Quaternion.Euler (0, 0, -90.0f));
 			tempspaceStation.GetComponent<SpaceStationScript> ().orbitcenter = new Vector3(-30.0f,0.0f,0.0f);
-			tempspaceStation.GetComponent<SpaceStationScript> ().orbitradius = 15;
 			spaceStations.Add(tempspaceStation);
 		}
 	}

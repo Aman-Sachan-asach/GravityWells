@@ -25,6 +25,7 @@ public class BlackholeScript : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
+		/*
 		Gizmos.color = Color.white;
 		Gizmos.DrawWireSphere(transform.position, outerRadius);
 
@@ -39,6 +40,7 @@ public class BlackholeScript : MonoBehaviour
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(transform.position, innerRadius);
+		*/
 	}
 
 	public Vector3 applyForces(ref Vector3 shipPos, ref Vector3 shipVel, float shipMass, float timestep)

@@ -17,6 +17,11 @@ public class ShipScript : MonoBehaviour
 	public Vector3 minVelocity;
 	public Vector3 maxVelocity;
 
+	//for docking movement
+	public float prevRotation;
+	public float dockingRotationSpeed;
+	public Vector3 orbitcenter;
+
 	//for dynamic control of ship
 	public float thrusterForceMagnitude;
 	public float rotationSpeed;
@@ -71,6 +76,17 @@ public class ShipScript : MonoBehaviour
 
 			flag_stopPhysics = true;
 			flag_dockingShip = true;
+
+			//move ship 8.47 units along the spacestations negated up vector
+			Vector3 newShipPos = spaceStation.transform.position - 4.22f * spaceStation.transform.up;
+			transform.position = newShipPos;
+
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
+			velocity.z = 0.0f;
+
+			orbitcenter = spaceStation.GetComponent<SpaceStationScript> ().orbitcenter;
+			dockingRotationSpeed = spaceStation.GetComponent<SpaceStationScript> ().rotationSpeed;
 		}
 		else if(collider.CompareTag("Planet"))
 		{
@@ -109,7 +125,15 @@ public class ShipScript : MonoBehaviour
 
 	void DockShip ()
 	{
-		
+		//rotate the ship just like the spaceStation
+		/*
+		prevRotation = rotation;
+		rotation -= dockingRotationSpeed;
+
+		Quaternion rot = Quaternion.Euler(new Vector3(0, rotation, 0));
+		GetComponent<Rigidbody>().MoveRotation(rot);
+		*/
+		transform.RotateAround(orbitcenter, Vector3.up, rotationSpeed);
 	}
 
 	void PlayerInput()
@@ -132,7 +156,7 @@ public class ShipScript : MonoBehaviour
 
 		//regular movement based on how much fuel the ship has left
 		//force Thruster
-		if (Input.GetAxisRaw("Vertical") > 0)
+		if ((Input.GetAxisRaw("Vertical") > 0) && !flag_dockingShip)
 		{
 			//Should use more fuel than rotation
 			force += thrusterForceMagnitude*transform.forward;
@@ -226,28 +250,27 @@ public class ShipScript : MonoBehaviour
 		state_predict_dot_force.z = 0.0f;
 	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-		if (flag_dockingShip) 
-		{
-			DockShip ();
-		}
-	}
-
 	void FixedUpdate () 
 	{
 		resetValuesEveryTimestep ();
 
+		PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
+
 		if (!flag_stopPhysics) 
 		{
 			UpdateVelocity(); //velocity change due to blackholes and other objects in game
-			PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
 			RK2();
 
 			//update position
-			position.y = positionalHeight;
 			gameObject.transform.position = position;
 		}
+
+		if (flag_dockingShip) 
+		{
+			DockShip ();
+		}
+
+		//fix height
+		position.y = positionalHeight;
     }
 }

@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1723455556968348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 2.07, z: 5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -131,8 +131,11 @@ MonoBehaviour:
   drag: 0
   force: {x: 0, y: 0, z: 0}
   dT: 0.001
-  minVelocity: {x: -2000, y: -0.5, z: -2000}
-  maxVelocity: {x: 2000, y: 0.5, z: 2000}
+  minVelocity: {x: -7500, y: -0.5, z: -7500}
+  maxVelocity: {x: 7500, y: 0.5, z: 7500}
+  prevRotation: 0
+  dockingRotationSpeed: 0
+  orbitcenter: {x: 0, y: 0, z: 0}
   thrusterForceMagnitude: 500
   rotationSpeed: 3
   rotation: 0

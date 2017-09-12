@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114815644704989764}
   m_Layer: 0
   m_Name: SpaceStationType1
-  m_TagString: Untagged
+  m_TagString: SpaceStation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,13 +127,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 493b019207bde9742ad34527dad912b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pos: {x: 0, y: 0, z: 0}
-  prevPos: {x: 0, y: 0, z: 0}
   rotationSpeed: 3
   rotation: 0
   prevRotation: 0
   orbitcenter: {x: 0, y: 0, z: 0}
-  orbitradius: 0
 --- !u!135 &135049212645752026
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -280,7 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectGenerator: {fileID: 801995199}
-  scenario: 2
+  scenario: 1
 --- !u!4 &1249269317
 Transform:
   m_ObjectHideFlags: 0
