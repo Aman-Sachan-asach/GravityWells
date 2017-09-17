@@ -25,7 +25,7 @@ public class BlackholeScript : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-		/*
+        /*
 		Gizmos.color = Color.white;
 		Gizmos.DrawWireSphere(transform.position, outerRadius);
 
@@ -40,7 +40,7 @@ public class BlackholeScript : MonoBehaviour
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(transform.position, innerRadius);
-		*/
+        */
 	}
 
 	public Vector3 applyForces(ref Vector3 shipPos, ref Vector3 shipVel, float shipMass, float timestep)
@@ -66,7 +66,7 @@ public class BlackholeScript : MonoBehaviour
 			pullForce = pullVelocity * (shipMass/timestep);
 		}
 		else if (r.magnitude < middle2Radius) {
-			actualStrength *= 1.6f;
+			actualStrength *= 1.8f;
 
 			pullVelocity.x = (-r.x / r.sqrMagnitude) * (temp.x / outerRadius) * (actualStrength * innerRadius);
 			pullVelocity.y = (-r.y / r.sqrMagnitude) * (temp.y / outerRadius) * (actualStrength * innerRadius);
@@ -74,7 +74,7 @@ public class BlackholeScript : MonoBehaviour
 			pullForce = pullVelocity * (shipMass/timestep);
 		}
 		else if (r.magnitude < middle3Radius) {
-			actualStrength *= 1.2f;
+			actualStrength *= 1.5f;
 
 			//change velocity such that it locks to a stable orbit
 			if((orbitalSpeed < (shipVel.magnitude + epsilon)) || (orbitalSpeed > (shipVel.magnitude + epsilon)))

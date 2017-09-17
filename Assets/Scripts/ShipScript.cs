@@ -9,7 +9,7 @@ public class ShipScript : MonoBehaviour
 	public float fuel;
 	public float mass;
 	public float drag;
-	float positionalHeight;
+	Vector3 fixPositionalHeight;
 
 	public Vector3 force; //the force applied every timestep to the ship that will produce some change in velocity every timestep
 
@@ -18,14 +18,12 @@ public class ShipScript : MonoBehaviour
 	public Vector3 maxVelocity;
 
 	//for docking movement
-	public float prevRotation;
 	public float dockingRotationSpeed;
 	public Vector3 orbitcenter;
 
 	//for dynamic control of ship
 	public float thrusterForceMagnitude;
 	public float rotationSpeed;
-	public float rotation;
 
 	//for RK2 integration
 	Vector3 state_pos;
@@ -47,7 +45,7 @@ public class ShipScript : MonoBehaviour
 
 	//flags
 	bool flag_EnteredBlackholeType1 = false;
-	bool flag_dockingShip = false;
+	bool flag_ShipDocked = false;
 	bool flag_stopPhysics = false;
 
 	// Use this for initialization
@@ -55,7 +53,7 @@ public class ShipScript : MonoBehaviour
 	{
 		ogs = GameObject.Find("ObjectGenerator").GetComponent<ObjectGeneratorScript> ();
 
-		positionalHeight = transform.position.y;
+		fixPositionalHeight = transform.position;
 	}
 
 	void Die () 
@@ -75,13 +73,19 @@ public class ShipScript : MonoBehaviour
 			spaceStation = collider.gameObject;
 
 			flag_stopPhysics = true;
-			flag_dockingShip = true;
-
-			//move ship 8.47 units along the spacestations negated up vector
-			Vector3 newShipPos = spaceStation.transform.position - 4.22f * spaceStation.transform.up;
+			flag_ShipDocked = true;
+            
+            //move ship 8.47 units along the spacestations negated up vector
+            Vector3 newShipPos = spaceStation.transform.position - 4.22f * spaceStation.transform.up;
 			transform.position = newShipPos;
 
-			velocity.x = 0.0f;
+            Vector3 dockedOrientation = -spaceStation.transform.up;
+            float angle = Vector3.Angle(dockedOrientation, transform.forward);
+            transform.Rotate(0, angle,0);
+
+            Debug.DrawLine(transform.position, transform.position + transform.up, Color.white, 2.0f, true);
+
+            velocity.x = 0.0f;
 			velocity.y = 0.0f;
 			velocity.z = 0.0f;
 
@@ -93,6 +97,8 @@ public class ShipScript : MonoBehaviour
 			//Make Ship Explode
 			Destroy (gameObject);
 			//create an explosion effect here
+
+			//game over condition
 		}
 		else if(collider.CompareTag("Moon"))
 		{
@@ -110,58 +116,61 @@ public class ShipScript : MonoBehaviour
 		{
 			collider.gameObject.GetComponent<BlackholeScript>().flag_InfluencingShip = false;
 		}
-		else if(collider.CompareTag("SpaceStation"))
-		{
-			//Give Boost to ship so it can relaunch
-
-			//continue using physics
-			flag_stopPhysics = false;
-		}
 		else
 		{
 			Debug.Log("Collided with " + collider.tag);
 		}
 	}
 
-	void DockShip ()
+	void RotateDockedShip ()
 	{
-		//rotate the ship just like the spaceStation
-		/*
-		prevRotation = rotation;
-		rotation -= dockingRotationSpeed;
-
-		Quaternion rot = Quaternion.Euler(new Vector3(0, rotation, 0));
-		GetComponent<Rigidbody>().MoveRotation(rot);
-		*/
-		transform.RotateAround(orbitcenter, Vector3.up, rotationSpeed);
+		//rotate the ship just like the spaceStation, ie around the blackhole
+		transform.RotateAround(orbitcenter, Vector3.up, dockingRotationSpeed);
 	}
 
-	void PlayerInput()
-	{
-		//Getting current rotation if any
-		if (Input.GetAxisRaw("Horizontal") > 0)
-		{
-			//uses barely any fuel
-			rotation += rotationSpeed;
-			Quaternion rot = Quaternion.Euler(new Vector3(0, rotation-90.0f, 0));
-			GetComponent<Rigidbody>().MoveRotation(rot);
-		}
-		else if (Input.GetAxisRaw("Horizontal") < 0)
-		{
-			//uses barely any fuel
-			rotation -= rotationSpeed;
-			Quaternion rot = Quaternion.Euler(new Vector3(0, rotation-90.0f, 0));
-			GetComponent<Rigidbody>().MoveRotation(rot);
-		}
+    void PlayerInput()
+    {
+        //Getting current rotation if any
+        if (Input.GetAxisRaw("Horizontal") > 0)
+        {
+            //uses barely any fuel
+            transform.RotateAround(transform.position, Vector3.up, rotationSpeed);
+        }
+        else if (Input.GetAxisRaw("Horizontal") < 0)
+        {
+            //uses barely any fuel
+            if (flag_ShipDocked)
+            {
+                transform.RotateAround(transform.position, Vector3.up, -2.0f * rotationSpeed);
+            }
+            else
+            {
+                transform.RotateAround(transform.position, Vector3.up, -rotationSpeed);
+            }
+        }
 
-		//regular movement based on how much fuel the ship has left
-		//force Thruster
-		if ((Input.GetAxisRaw("Vertical") > 0) && !flag_dockingShip)
-		{
-			//Should use more fuel than rotation
-			force += thrusterForceMagnitude*transform.forward;
-		}
-	}
+        //regular movement based on how much fuel the ship has left
+        //force Thruster
+        if ((Input.GetAxisRaw("Vertical") > 0) && !flag_ShipDocked)
+        {
+            //Should use more fuel than rotation
+            force += thrusterForceMagnitude * transform.forward;
+        }
+
+        //Relaunch from spacestation
+        if (Input.GetButton("Relaunch"))
+        {
+            flag_stopPhysics = false;
+            flag_ShipDocked = false;
+
+            //give velocity boost
+            velocity = transform.forward * 700;
+
+            //refill fuel
+
+        }
+
+    }
 
 	void UpdateVelocity()
 	{
@@ -265,12 +274,14 @@ public class ShipScript : MonoBehaviour
 			gameObject.transform.position = position;
 		}
 
-		if (flag_dockingShip) 
+		if (flag_ShipDocked) 
 		{
-			DockShip ();
+			RotateDockedShip ();
 		}
 
-		//fix height
-		position.y = positionalHeight;
+        //fix height
+        fixPositionalHeight.x = transform.position.x;
+        fixPositionalHeight.z = transform.position.z;
+        transform.position = fixPositionalHeight;
     }
 }

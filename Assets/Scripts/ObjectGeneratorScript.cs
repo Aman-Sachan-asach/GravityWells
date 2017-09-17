@@ -24,7 +24,9 @@ public class ObjectGeneratorScript : MonoBehaviour
 		generateBlackholes (scenario);
 		generateSpaceStations (scenario);
 		generatePlayerShip (scenario);
-	}
+        generatePlanets (scenario);
+        generateMoons (scenario);
+    }
 
 	public void generateBlackholes(int scenario)
 	{
@@ -51,14 +53,35 @@ public class ObjectGeneratorScript : MonoBehaviour
 	{
 		if (scenario == 1 || scenario == 2) 
 		{
-			Vector3 pos = new Vector3 (30.0f, 0.25f, 25.0f);
+			Vector3 pos = new Vector3 (30.0f, 1.8f, 25.0f);
 			Quaternion rot = Quaternion.identity;
 			rot *= Quaternion.Euler (0, -90, 0);  //face -x axis
 			GameObject playerShip = Instantiate (playerShipPrefab, pos, rot) as GameObject;
 		}
 	}
 
-	public void positionPlayerShip(Vector3 pos)
+    public void generatePlanets(int scenario)
+    {
+        if (scenario == 1 || scenario == 2)
+        {
+            Vector3 pos = new Vector3(-30.0f, 0.0f, -100.0f);
+            GameObject tempPlanet = Instantiate(planetPrefab1, pos, Quaternion.identity) as GameObject;
+            planets.Add(tempPlanet);
+        }
+    }
+
+    public void generateMoons(int scenario)
+    {
+        if (scenario == 1 || scenario == 2)
+        {
+            Vector3 pos = new Vector3(-40.0f, 0.0f, -100.0f);
+            GameObject tempMoon = Instantiate(moonPrefab1, pos, Quaternion.identity) as GameObject;
+            tempMoon.GetComponent<MoonScript>().orbitcenter = new Vector3(-30.0f, 0.0f, -100.0f);
+            moons.Add(tempMoon);
+        }
+    }
+
+    public void positionPlayerShip(Vector3 pos)
 	{
 		playerShip.transform.position = pos;
 	}

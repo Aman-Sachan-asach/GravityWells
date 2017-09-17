@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1723455556968348}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.07, z: 5}
+  m_LocalPosition: {x: 0, y: 1.8, z: 5}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -124,15 +124,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d0feb4fde705b46a292c24d18db5cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0.25, z: 0}
+  position: {x: 0, y: 1.5, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   fuel: 100
   mass: 1
   drag: 0
   force: {x: 0, y: 0, z: 0}
   dT: 0.001
-  minVelocity: {x: -7500, y: -0.5, z: -7500}
-  maxVelocity: {x: 7500, y: 0.5, z: 7500}
+  minVelocity: {x: -50000, y: -0.5, z: -50000}
+  maxVelocity: {x: 50000, y: 2.07, z: 50000}
   prevRotation: 0
   dockingRotationSpeed: 0
   orbitcenter: {x: 0, y: 0, z: 0}

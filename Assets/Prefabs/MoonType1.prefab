@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33728471234623354}
   - component: {fileID: 135597692051571728}
   - component: {fileID: 23688452147306534}
+  - component: {fileID: 114188129019019438}
   m_Layer: 0
   m_Name: MoonType1
   m_TagString: Moon
@@ -81,6 +82,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1866565488664878}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114188129019019438
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866565488664878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee40d4675972b724681c765af3297473, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 3
+  orbitcenter: {x: 0, y: 0, z: 0}
 --- !u!135 &135597692051571728
 SphereCollider:
   m_ObjectHideFlags: 1
