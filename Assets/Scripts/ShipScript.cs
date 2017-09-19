@@ -244,7 +244,7 @@ public class ShipScript : MonoBehaviour
             }
 
             //Relaunch from spacestation
-            if (Input.GetButton("Relaunch"))// && flag_ShipDocked)
+            if (Input.GetButton("Relaunch") && flag_ShipDocked)
             {
                 flag_stopPhysics = false;
                 flag_ShipDocked = false;
@@ -261,6 +261,17 @@ public class ShipScript : MonoBehaviour
             if (Input.GetButton("Quit"))
             {
                 SceneManager.LoadScene("Start Scene");
+            }
+            if (Input.GetButton("Refill"))
+            {
+                //Cheat for testing and demo-ing 
+                Debug.Log("used Cheat");
+                //give velocity boost
+                velocity = transform.forward * relaunchSpeed;
+
+                //refill fuel
+                currentFuel = MaxFuel;
+                fuelBar.value = MaxFuel;
             }
         }        
     }
