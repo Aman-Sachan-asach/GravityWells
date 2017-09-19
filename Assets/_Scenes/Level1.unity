@@ -664,7 +664,7 @@ MonoBehaviour:
   fuelBar: {fileID: 473155937}
   Timer: {fileID: 1310049111}
   scenario: 1
-  maxScenarios: 0
+  maxScenarios: 5
 --- !u!4 &1249269317
 Transform:
   m_ObjectHideFlags: 0
