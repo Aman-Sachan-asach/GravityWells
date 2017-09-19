@@ -1,24 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class ShipScript : MonoBehaviour 
 {
+    Vector3 prevPosition;
 	public Vector3 position;
 	public Vector3 velocity;
-	public float fuel;
-	public float mass;
-	public float drag;
+    public float mass;
 	Vector3 fixPositionalHeight;
 
-	public Vector3 force; //the force applied every timestep to the ship that will produce some change in velocity every timestep
+    //Fuel
+    public float currentFuel;
+    public float MaxFuel;
+    public float thrustFuelUsed;
+    public float rotationFuelUsed;
+    //Fuel Bar handle
+    Slider fuelBar;
+
+    //Relaunch Speed Multiplier
+    public float relaunchSpeed;
 
 	public float dT = 0.02f;
 	public Vector3 minVelocity;
 	public Vector3 maxVelocity;
+    public Vector3 force; //the force applied every timestep to the ship that will produce some change in velocity every timestep
 
-	//for docking movement
-	public float dockingRotationSpeed;
+    //for docking movement
+    public float dockingRotationSpeed;
 	public Vector3 orbitcenter;
 
 	//for dynamic control of ship
@@ -39,35 +49,72 @@ public class ShipScript : MonoBehaviour
 	Vector3 state_predict_dot_vel;
 	Vector3 state_predict_dot_force;
 
-	//other GameObjects
-	ObjectGeneratorScript ogs;
-	GameObject spaceStation;
+    //other GameObjects
+    GameObject camera;
+    GamePlayManagerScript gms;
+    ObjectGeneratorScript ogs;
+    public GameObject Explosion;
+    //GameObject gameOver;
+    GameObject stageCleared;
+    GameObject spaceStation;
 
 	//flags
-	bool flag_EnteredBlackholeType1 = false;
-	bool flag_ShipDocked = false;
+    bool flag_ShipDocked = false;
 	bool flag_stopPhysics = false;
+    bool flag_stopAcceptingInput = false;
 
-	// Use this for initialization
-	void Start () 
+    // Use this for initialization
+    void Start () 
 	{
 		ogs = GameObject.Find("ObjectGenerator").GetComponent<ObjectGeneratorScript> ();
+        gms = GameObject.Find("GamePlayManager").GetComponent<GamePlayManagerScript>();
+        camera = GameObject.Find("Main Camera");
 
-		fixPositionalHeight = transform.position;
+        fuelBar = gms.fuelBar;
+
+        //set camera so that it starts off behind and above the ship
+        Vector3 camVec = transform.position;
+        camVec.y += 40.0f;
+        camVec += 18 * -transform.forward;
+        camera.transform.position = camVec;
+
+        //set fuel levels
+        currentFuel = MaxFuel;
+        fuelBar.value = MaxFuel;
+
+        fixPositionalHeight = transform.position;
+
+        //for win condition
+        stageCleared = gms.stageCleared;
+        stageCleared.SetActive(false);
 	}
 
-	void Die () 
+	public void Die () 
 	{
 		Destroy (gameObject); //removes gameobject from scene and marks it for deletion
 	}
 
-	void OnTriggerEnter(Collider collider) //Handles all object interactions
+    public void DieWithExplosion()
+    {
+        //Make Ship Explode
+        Destroy(gameObject);
+
+        //create an explosion effect here
+        Vector3 pos = transform.position;
+        GameObject tempExplosion = Instantiate(Explosion, pos, Quaternion.identity) as GameObject;
+    }
+
+    void OnTriggerEnter(Collider collider) //Handles all object interactions
 	{
 		if(collider.CompareTag("BlackholeType1"))
 		{
 			collider.gameObject.GetComponent<BlackholeScript>().flag_InfluencingShip = true;
 		}
-		else if(collider.CompareTag("SpaceStation"))
+        else if (collider.CompareTag("RepulsiveStarType1"))
+        {
+            collider.gameObject.GetComponent<RepulsiveStarScript>().flag_InfluencingShip = true;
+        }
+        else if(collider.CompareTag("SpaceStation"))
 		{
 			//Attach Ship to SpaceStation
 			spaceStation = collider.gameObject;
@@ -94,32 +141,54 @@ public class ShipScript : MonoBehaviour
 		}
 		else if(collider.CompareTag("Planet"))
 		{
-			//Make Ship Explode
-			Destroy (gameObject);
-			//create an explosion effect here
-
-			//game over condition
-		}
+            DieWithExplosion();
+            gms.StartCoroutine("GameOverandReset");
+        }
 		else if(collider.CompareTag("Moon"))
 		{
-			//Win condition
-		}
+            //stop moving the ship
+            velocity.x = 0.0f;
+            velocity.y = 0.0f;
+            velocity.z = 0.0f;
+
+            //stop physics
+            flag_stopPhysics = true;
+            //stop taking inputs
+            flag_stopAcceptingInput = true;
+
+            StartCoroutine("ClearedStage");
+        }
 		else
 		{
 			Debug.Log("Collided with " + collider.tag);
 		}
 	}
 
-	void OnTriggerExit(Collider collider) //Handles all object interactions
+    public IEnumerator ClearedStage()
+    {
+        //Win condition
+        stageCleared.SetActive(true);
+
+        yield return new WaitForSeconds(3.0f);
+
+        //Generate NextLevel
+        gms.NextLevel();
+    }
+
+    void OnTriggerExit(Collider collider) //Handles all object interactions
 	{
 		if(collider.CompareTag("BlackholeType1"))
 		{
 			collider.gameObject.GetComponent<BlackholeScript>().flag_InfluencingShip = false;
 		}
-		else
-		{
-			Debug.Log("Collided with " + collider.tag);
-		}
+        else if (collider.CompareTag("RepulsiveStarType1"))
+        {
+            collider.gameObject.GetComponent<RepulsiveStarScript>().flag_InfluencingShip = false;
+        }
+  //      else
+		//{
+		//	Debug.Log("Collided with " + collider.tag);
+		//}
 	}
 
 	void RotateDockedShip ()
@@ -130,46 +199,61 @@ public class ShipScript : MonoBehaviour
 
     void PlayerInput()
     {
-        //Getting current rotation if any
-        if (Input.GetAxisRaw("Horizontal") > 0)
+        if(!flag_stopAcceptingInput)
         {
-            //uses barely any fuel
-            transform.RotateAround(transform.position, Vector3.up, rotationSpeed);
-        }
-        else if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            //uses barely any fuel
-            if (flag_ShipDocked)
+            //Getting current rotation if any
+            if (Input.GetAxisRaw("Horizontal") > 0)
             {
-                transform.RotateAround(transform.position, Vector3.up, -2.0f * rotationSpeed);
+                //uses barely any fuel
+                currentFuel -= rotationFuelUsed;
+                fuelBar.value = currentFuel/MaxFuel;
+
+                //rotate
+                transform.RotateAround(transform.position, Vector3.up, rotationSpeed);
             }
-            else
+            else if (Input.GetAxisRaw("Horizontal") < 0)
             {
-                transform.RotateAround(transform.position, Vector3.up, -rotationSpeed);
+                //uses barely any fuel
+                currentFuel -= rotationFuelUsed;
+                fuelBar.value = currentFuel / MaxFuel;
+
+                //rotate
+                if (flag_ShipDocked)
+                {
+                    transform.RotateAround(transform.position, Vector3.up, -2.0f * rotationSpeed);
+                }
+                else
+                {
+                    transform.RotateAround(transform.position, Vector3.up, -rotationSpeed);
+                }
             }
-        }
 
-        //regular movement based on how much fuel the ship has left
-        //force Thruster
-        if ((Input.GetAxisRaw("Vertical") > 0) && !flag_ShipDocked)
-        {
-            //Should use more fuel than rotation
-            force += thrusterForceMagnitude * transform.forward;
-        }
+            //regular movement based on how much fuel the ship has left
+            //force Thruster
+            if ((Input.GetAxisRaw("Vertical") > 0) && !flag_ShipDocked)
+            {
+                //Should use more fuel than rotation
+                currentFuel -= thrustFuelUsed;
+                fuelBar.value = currentFuel / MaxFuel;
+                
+                //thrust
+                force += thrusterForceMagnitude * transform.forward;
+            }
 
-        //Relaunch from spacestation
-        if (Input.GetButton("Relaunch"))
-        {
-            flag_stopPhysics = false;
-            flag_ShipDocked = false;
+            //Relaunch from spacestation
+            if (Input.GetButton("Relaunch"))// && flag_ShipDocked)
+            {
+                flag_stopPhysics = false;
+                flag_ShipDocked = false;
 
-            //give velocity boost
-            velocity = transform.forward * 700;
+                //give velocity boost
+                velocity = transform.forward * relaunchSpeed;
 
-            //refill fuel
-
-        }
-
+                //refill fuel
+                currentFuel = MaxFuel;
+                fuelBar.value = MaxFuel;
+            }
+        }        
     }
 
 	void UpdateVelocity()
@@ -186,8 +270,19 @@ public class ShipScript : MonoBehaviour
 			}
 		}
 
-		velocity += (force/mass)*dT;
-		velocity = velocity * (1.0f - drag);
+        //Change Velocity and position based on the repulsive Stars push
+        List<GameObject> repulsiveStars = ogs.repulsiveStars;
+        for (int i = 0; i < repulsiveStars.Count; i++)
+        {
+            RepulsiveStarScript rss = ogs.repulsiveStars[i].GetComponent<RepulsiveStarScript>();
+
+            if (rss.flag_InfluencingShip)
+            {
+                force += rss.applyForces(ref position, mass, dT);
+            }
+        }
+
+        velocity += (force/mass)*dT; //no drag
 
 		//clamp velocity
 		velocity.x = Mathf.Clamp(velocity.x, minVelocity.x, maxVelocity.x);
@@ -259,8 +354,9 @@ public class ShipScript : MonoBehaviour
 		state_predict_dot_force.z = 0.0f;
 	}
 
-	void FixedUpdate () 
+	void FixedUpdate ()
 	{
+        prevPosition = transform.position;
 		resetValuesEveryTimestep ();
 
 		PlayerInput(); //unity's rigidbody stuff doesnt give you enough control over the physics
@@ -279,7 +375,11 @@ public class ShipScript : MonoBehaviour
 			RotateDockedShip ();
 		}
 
-        //fix height
+        //update camera so it follows the ship
+        Vector3 translateCamVec = gameObject.transform.position - prevPosition;
+        camera.transform.position += translateCamVec;
+
+        //lock height
         fixPositionalHeight.x = transform.position.x;
         fixPositionalHeight.z = transform.position.z;
         transform.position = fixPositionalHeight;

@@ -15,13 +15,14 @@ public class BlackholeScript : MonoBehaviour
 	float orbitalSpeed = 0.0f;
 	Vector3 orbitalAcceleration = new Vector3(0.0f,0.0f,0.0f);
 	float epsilon = 0.5f;
-	// Use this for initialization
-	void Start () 
+    
+    // Use this for initialization
+    void Start () 
 	{
 		middle1Radius = outerRadius*0.33f;
 		middle2Radius = outerRadius*0.5f;
 		middle3Radius = outerRadius*0.75f;
-	}
+    }
 
 	void OnDrawGizmos()
 	{
@@ -54,10 +55,18 @@ public class BlackholeScript : MonoBehaviour
 		Vector3 pullVelocity = new Vector3 (0.0f, 0.0f, 0.0f);
 		Vector3 pullForce = new Vector3 (0.0f, 0.0f, 0.0f);
 
-		if (r.magnitude < innerRadius) {
-			//destroyship byt sucking it in the blackhole
-		}
-		else if (r.magnitude < middle1Radius) {
+		if (r.magnitude < innerRadius)
+        {
+            //destroyship byt sucking it in the blackhole
+            ObjectGeneratorScript obs = GameObject.Find("ObjectGenerator").GetComponent<ObjectGeneratorScript>();
+            GamePlayManagerScript gms = GameObject.Find("GamePlayManager").GetComponent<GamePlayManagerScript>();
+            ShipScript shipscript = obs.playerShip.GetComponent<ShipScript>();            
+
+            shipscript.Die();
+            gms.StartCoroutine("GameOverandReset");
+        }
+		else if (r.magnitude < middle1Radius)
+        {
 			actualStrength *= 2.0f;
 
 			pullVelocity.x = (-r.x / r.sqrMagnitude) * (temp.x / outerRadius) * (actualStrength * innerRadius);
@@ -65,7 +74,8 @@ public class BlackholeScript : MonoBehaviour
 			pullVelocity.z = (-r.z / r.sqrMagnitude) * (temp.z / outerRadius) * (actualStrength * innerRadius);
 			pullForce = pullVelocity * (shipMass/timestep);
 		}
-		else if (r.magnitude < middle2Radius) {
+		else if (r.magnitude < middle2Radius)
+        {
 			actualStrength *= 1.8f;
 
 			pullVelocity.x = (-r.x / r.sqrMagnitude) * (temp.x / outerRadius) * (actualStrength * innerRadius);
@@ -73,7 +83,8 @@ public class BlackholeScript : MonoBehaviour
 			pullVelocity.z = (-r.z / r.sqrMagnitude) * (temp.z / outerRadius) * (actualStrength * innerRadius);
 			pullForce = pullVelocity * (shipMass/timestep);
 		}
-		else if (r.magnitude < middle3Radius) {
+		else if (r.magnitude < middle3Radius)
+        {
 			actualStrength *= 1.5f;
 
 			//change velocity such that it locks to a stable orbit
@@ -94,8 +105,4 @@ public class BlackholeScript : MonoBehaviour
 
 		return pullForce;
 	}
-
-	// Update is called once per frame
-	void Update () 
-	{}
 }

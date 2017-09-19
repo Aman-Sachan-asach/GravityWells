@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4489641327924330}
   - component: {fileID: 33131704488327286}
   - component: {fileID: 23396782108051600}
+  - component: {fileID: 54293439218010784}
   - component: {fileID: 64065176700519866}
-  - component: {fileID: 54218135382489810}
   - component: {fileID: 114307206902466750}
   m_Layer: 0
   m_Name: PlayerShip
@@ -84,7 +84,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1723455556968348}
   m_Mesh: {fileID: 4300000, guid: f8634069b3335c54cb91b363a15fc173, type: 3}
---- !u!54 &54218135382489810
+--- !u!54 &54293439218010784
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -97,7 +97,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!64 &64065176700519866
 MeshCollider:
@@ -126,16 +126,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 0, y: 1.5, z: 0}
   velocity: {x: 0, y: 0, z: 0}
-  fuel: 100
   mass: 1
-  drag: 0
-  force: {x: 0, y: 0, z: 0}
+  currentFuel: 0
+  MaxFuel: 1000
+  thrustFuelUsed: 5
+  rotationFuelUsed: 1
+  relaunchSpeed: 700
   dT: 0.001
   minVelocity: {x: -50000, y: -0.5, z: -50000}
   maxVelocity: {x: 50000, y: 2.07, z: 50000}
-  prevRotation: 0
+  force: {x: 0, y: 0, z: 0}
   dockingRotationSpeed: 0
   orbitcenter: {x: 0, y: 0, z: 0}
   thrusterForceMagnitude: 500
   rotationSpeed: 3
-  rotation: 0
+  Explosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 2}

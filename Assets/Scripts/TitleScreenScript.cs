@@ -1,24 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class TitleScreenScript : MonoBehaviour
 {
-	// Use this for initialization
-	void Start () {}
-	
-	// Update is called once per frame
-	void Update () {}
-
 	public void NewGame()
 	{
-		Application.LoadLevel("Lvl001");
-	}
+        SceneManager.LoadScene("Level0");
+    }
 
 	public void ContinueGame()
 	{
-		//read file to determine what the last level you were on is called
-		Application.LoadLevel("Lvl001");
+        //read player pref to determine what the last level you were on is called
+        int currentLevel = PlayerPrefs.GetInt("Level");
+
+        string level = "Level";
+        level += currentLevel.ToString();
+        SceneManager.LoadScene(level);
 	}
 
 	public void HighScore()

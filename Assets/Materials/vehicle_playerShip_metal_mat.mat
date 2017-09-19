@@ -30,7 +30,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Shininess: 0.15252854
+    - _Shininess: 0.01
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ReflectColor: {r: 0.99264705, g: 0.9855999, b: 0.8904628, a: 0.5019608}

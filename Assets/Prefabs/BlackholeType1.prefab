@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outerRadius: 30
-  innerRadius: 1
+  innerRadius: 2
   strength: 150
   flag_InfluencingShip: 0
   flag_CWRotation: 0

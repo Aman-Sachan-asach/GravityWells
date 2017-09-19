@@ -9,6 +9,7 @@ TagManager:
   - Moon
   - Planet
   - SpaceStation
+  - RepulsiveStarType1
   layers:
   - Default
   - TransparentFX

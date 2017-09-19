@@ -32,7 +32,7 @@ Material:
     m_Floats:
     - _EdgeLength: 50
     - _Parallax: 0.5
-    - _Shininess: 0.112127006
+    - _Shininess: 0.387
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.41911763, g: 0.39786422, b: 0.34207395, a: 1}
