@@ -437,11 +437,11 @@ public class ShipScript : MonoBehaviour
             flag_doOnce = false;
 
             //get scene bounds and add offsets to it
-            Vector3 min = new Vector3(-50, 0, -50);
-            Vector3 max = new Vector3(50, 0, 50);
+            Vector3 min = new Vector3(-50, -50, -50);
+            Vector3 max = new Vector3(50, 50, 50);
 
             min.x += ogs.sceneBounds.min.x;
-            min.y = ogs.sceneBounds.min.y;
+            min.y += ogs.sceneBounds.min.y;
             min.z += ogs.sceneBounds.min.z;
 
             max.x += ogs.sceneBounds.max.x;
@@ -450,7 +450,7 @@ public class ShipScript : MonoBehaviour
 
             sceneBounds.SetMinMax(min, max);
 
-            print("ogs " + sceneBounds.min + " " + sceneBounds.max);
+            //print("ogs " + sceneBounds.min + " " + sceneBounds.max);
         }
 
         //Check for gameOver State

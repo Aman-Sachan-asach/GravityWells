@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outerRadius: 30
   innerRadius: 2
-  strength: 150
+  strength: 25
   flag_InfluencingShip: 0
   flag_CWRotation: 0
 --- !u!135 &135696799608501534

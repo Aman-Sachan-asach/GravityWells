@@ -19,8 +19,6 @@ public class GamePlayManagerScript : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-        scenario = PlayerPrefs.GetInt("Level");
-
         gameOver.SetActive(false);
 
         timerScript = Timer.GetComponent<TimerScript>();

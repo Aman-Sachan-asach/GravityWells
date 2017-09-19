@@ -15,6 +15,8 @@ public class TitleScreenScript : MonoBehaviour
     void Start()
     {
         hsText = HighScore.GetComponent<Text>() as Text;
+
+        PlayerPrefs.SetInt("Level", 0);
     }
 
     public void NewGame()
@@ -49,7 +51,7 @@ public class TitleScreenScript : MonoBehaviour
         {
             float mins = PlayerPrefs.GetFloat(levelmins);
             float secs = PlayerPrefs.GetFloat(levelsecs);
-            final += "Level " + i.ToString() + "      " + mins.ToString() + ":" + secs.ToString();
+            final += "Level " + i.ToString() + "      " + mins.ToString() + ":" + secs.ToString() + "\n";
 
             Debug.Log("minutes: " + mins);
             Debug.Log("seconds: " + secs);

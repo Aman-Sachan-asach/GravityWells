@@ -126,7 +126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outerRadius: 30
   innerRadius: 10
-  strength: 2
+  strength: 1.3
   flag_InfluencingShip: 0
 --- !u!135 &135606589704237122
 SphereCollider:

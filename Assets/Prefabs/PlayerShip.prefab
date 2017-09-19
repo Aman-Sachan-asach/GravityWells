@@ -128,7 +128,7 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   mass: 1
   currentFuel: 0
-  MaxFuel: 1000
+  MaxFuel: 400
   thrustFuelUsed: 1
   rotationFuelUsed: 0.2
   relaunchSpeed: 700
