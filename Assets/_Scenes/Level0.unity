@@ -546,8 +546,10 @@ MonoBehaviour:
   playerShip: {fileID: 0}
   blackholePrefab1: {fileID: 1901489544940212, guid: 04874d775f86ade47b3cb3a304d92b87,
     type: 2}
+  blackholePrefab2: {fileID: 0}
   repulsiveStarPrefab1: {fileID: 1935078901013634, guid: b07762c68f9b02648950c22c5c06a0d3,
     type: 2}
+  repulsiveStarPrefab2: {fileID: 0}
   spaceStationPrefab1: {fileID: 1250034184122954, guid: ae98a3854c2f47b43808ceaf1e70732a,
     type: 2}
   moonPrefab1: {fileID: 1866565488664878, guid: 1b59803b44496854693c181d2660a9e9,
@@ -660,7 +662,7 @@ MonoBehaviour:
   fuelBar: {fileID: 473155937}
   Timer: {fileID: 1310049111}
   scenario: 0
-  maxScenarios: 0
+  maxScenarios: 5
 --- !u!4 &1249269317
 Transform:
   m_ObjectHideFlags: 0

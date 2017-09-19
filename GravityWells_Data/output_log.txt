@@ -19,20 +19,9 @@ Platform assembly: D:\Documents\Github\GravityWells\GravityWells_Data\Managed\Un
 Loading D:\Documents\Github\GravityWells\GravityWells_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\Documents\Github\GravityWells\GravityWells_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
 Loading D:\Documents\Github\GravityWells\GravityWells_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
-- Completed reload, in  0.153 seconds
+- Completed reload, in  0.146 seconds
 Platform assembly: D:\Documents\Github\GravityWells\GravityWells_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\Documents\Github\GravityWells\GravityWells_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
-<RI> Initialized touch support.
-UnloadTime: 3.617549 ms
-Setting up 4 worker threads for Enlighten.
-  Thread -> id: 32f0 -> priority: 1 
-  Thread -> id: 3688 -> priority: 1 
-  Thread -> id: 388c -> priority: 1 
-  Thread -> id: 3558 -> priority: 1 
-Application.Quit() only works in build, not in editor
- 
-(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
-
