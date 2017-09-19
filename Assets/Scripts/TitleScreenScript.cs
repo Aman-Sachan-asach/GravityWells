@@ -28,10 +28,10 @@ public class TitleScreenScript : MonoBehaviour
 	public void ContinueGame()
 	{
         //read player pref to determine what the last level you were on is called
-        int currentLevel = PlayerPrefs.GetInt("Level");
-
+        int i = PlayerPrefs.GetInt("Level");
+        print(i);
         string level = "Level";
-        level += currentLevel.ToString();
+        level += i.ToString();
         SceneManager.LoadScene(level);
 	}
 

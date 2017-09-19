@@ -31,7 +31,7 @@ public class GamePlayManagerScript : MonoBehaviour
         string levelmins = "Level" + scenario.ToString() + "minutes";
         string levelsecs = "Level" + scenario.ToString() + "seconds";
 
-        print("in score check");
+        //print("in score check");
 
         if (PlayerPrefs.HasKey(levelmins))
         {
@@ -48,7 +48,7 @@ public class GamePlayManagerScript : MonoBehaviour
         }
         else
         {
-            print("create new level scores");
+            //print("create new level scores");
             PlayerPrefs.SetFloat(levelmins, timerScript.minutes);
             PlayerPrefs.SetFloat(levelsecs, timerScript.seconds);
         }
@@ -69,24 +69,23 @@ public class GamePlayManagerScript : MonoBehaviour
     {
         if ( (scenario+1) < maxScenarios )
         {
-            scenario++;            
+            scenario++;
+            if (scenario > PlayerPrefs.GetInt("Level")) ;
+            {
+                PlayerPrefs.SetInt("Level", scenario);
+            }
+
+            string level = "Level";
+            level += scenario.ToString();
+            HighScoreCheckandSet();
+            SceneManager.LoadScene(level);
         }
         else
         {
             print("No more Levels :(");
+            PlayerPrefs.SetInt("Level", 0);
             SceneManager.LoadScene("Start Scene");
         }
-
-        int currentLevel = scenario;
-        if ( currentLevel > PlayerPrefs.GetInt("Level") );
-        {
-            PlayerPrefs.SetInt("Level", currentLevel);
-        }
-
-        string level = "Level";
-        level += scenario.ToString();
-        HighScoreCheckandSet();
-        SceneManager.LoadScene(level);
     }
 
     //Coroutines are stalled indefinetly be called once the object that contains it has been destroyed or made inactive
