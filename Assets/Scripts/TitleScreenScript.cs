@@ -1,12 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class TitleScreenScript : MonoBehaviour
 {
-	public void NewGame()
+    public GameObject HighScore;
+    public Text hsText;
+    public GameObject HighScoreBackground; 
+    public bool flag_inHighScoreMode = false;
+    
+    // Use this for initialization
+    void Start()
+    {
+        hsText = HighScore.GetComponent<Text>() as Text;
+    }
+
+    public void NewGame()
 	{
+        PlayerPrefs.SetInt("Level", 0);
         SceneManager.LoadScene("Level0");
     }
 
@@ -20,10 +33,47 @@ public class TitleScreenScript : MonoBehaviour
         SceneManager.LoadScene(level);
 	}
 
-	public void HighScore()
+	public void DisplayHighScore()
 	{
-		Debug.Log ("You should implement a high score screen.");
-	}
+        HighScoreBackground.SetActive(true);
+        HighScore.SetActive(true);
+        flag_inHighScoreMode = true;
+
+        string final = "";
+
+        int i = 0;
+        string levelmins = "Level" + i.ToString() + "minutes";
+        string levelsecs = "Level" + i.ToString() + "seconds";
+                
+        while(PlayerPrefs.HasKey(levelmins))
+        {
+            float mins = PlayerPrefs.GetFloat(levelmins);
+            float secs = PlayerPrefs.GetFloat(levelsecs);
+            final += "Level " + i.ToString() + "      " + mins.ToString() + ":" + secs.ToString();
+
+            Debug.Log("minutes: " + mins);
+            Debug.Log("seconds: " + secs);
+
+            i++;
+            levelmins = "Level" + i.ToString() + "minutes";
+            levelsecs = "Level" + i.ToString() + "seconds";
+        }
+        
+        hsText.text = "Best Times: \n" + final;
+    }
+
+    public void Update()
+    {
+        if(flag_inHighScoreMode)
+        {
+            if( Input.GetButton("Submit") )
+            {
+                HighScoreBackground.SetActive(false);
+                HighScore.SetActive(false);
+                flag_inHighScoreMode = false;
+            }
+        }
+    }
 
 	public void ExitGame()
 	{

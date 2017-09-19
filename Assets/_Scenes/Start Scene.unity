@@ -728,6 +728,8 @@ RectTransform:
   - {fileID: 782413767}
   - {fileID: 226103627}
   - {fileID: 1358158014}
+  - {fileID: 2003239507}
+  - {fileID: 567987622}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -736,6 +738,80 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &567987621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 567987622}
+  - component: {fileID: 567987624}
+  - component: {fileID: 567987623}
+  m_Layer: 5
+  m_Name: HighScore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &567987622
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 567987621}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_Children: []
+  m_Father: {fileID: 430655743}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 5.7844e-10, y: 0}
+  m_SizeDelta: {x: 350, y: 400}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &567987623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 567987621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 2100000, guid: e24644f0e3f59b74aa7740e2b87ac2d5, type: 2}
+  m_Color: {r: 0.3241377, g: 1, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: afccc597a5a865c45b3bc89250dee821, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 0
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Best Times:'
+--- !u!222 &567987624
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 567987621}
 --- !u!1 &782413766
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,7 +1258,7 @@ GameObject:
   - component: {fileID: 1142472177}
   - component: {fileID: 1142472176}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: GameTitleBackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1462,7 +1538,7 @@ GameObject:
   - component: {fileID: 1458303340}
   - component: {fileID: 1458303339}
   m_Layer: 5
-  m_Name: Exit
+  m_Name: Exit Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1701,6 +1777,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965ec4b204801fc4088d9e7e2d783f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HighScore: {fileID: 567987621}
+  hsText: {fileID: 0}
+  HighScoreBackground: {fileID: 2003239506}
+  flag_inHighScoreMode: 0
 --- !u!1 &1898517370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,7 +1867,7 @@ GameObject:
   - component: {fileID: 1913848582}
   - component: {fileID: 1913848581}
   m_Layer: 5
-  m_Name: New Game
+  m_Name: New Game Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1983,7 +2063,7 @@ GameObject:
   - component: {fileID: 1990788767}
   - component: {fileID: 1990788766}
   m_Layer: 5
-  m_Name: High Score
+  m_Name: High Score Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2048,7 +2128,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1613938007}
-        m_MethodName: HighScore
+        m_MethodName: DisplayHighScore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2093,6 +2173,73 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1990788764}
+--- !u!1 &2003239506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2003239507}
+  - component: {fileID: 2003239509}
+  - component: {fileID: 2003239508}
+  m_Layer: 5
+  m_Name: HighScoreBackground
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &2003239507
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2003239506}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 15.794047, y: 15.794014, z: 15.794014}
+  m_Children: []
+  m_Father: {fileID: 430655743}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2003239508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2003239506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Texture: {fileID: 2800000, guid: 4f9a1a077f2ee7a439604fef79f9ebd6, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &2003239509
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2003239506}
 --- !u!1 &2025899151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2105,7 +2252,7 @@ GameObject:
   - component: {fileID: 2025899154}
   - component: {fileID: 2025899153}
   m_Layer: 5
-  m_Name: Continue
+  m_Name: Continue Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

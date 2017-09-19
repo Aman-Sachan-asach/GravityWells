@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class ShipScript : MonoBehaviour 
@@ -54,7 +55,7 @@ public class ShipScript : MonoBehaviour
     GamePlayManagerScript gms;
     ObjectGeneratorScript ogs;
     public GameObject Explosion;
-    //GameObject gameOver;
+    Bounds sceneBounds;
     GameObject stageCleared;
     GameObject spaceStation;
 
@@ -62,6 +63,8 @@ public class ShipScript : MonoBehaviour
     bool flag_ShipDocked = false;
 	bool flag_stopPhysics = false;
     bool flag_stopAcceptingInput = false;
+    bool flag_doOnce = true;
+    int count = 0;
 
     // Use this for initialization
     void Start () 
@@ -185,11 +188,11 @@ public class ShipScript : MonoBehaviour
         {
             collider.gameObject.GetComponent<RepulsiveStarScript>().flag_InfluencingShip = false;
         }
-  //      else
-		//{
-		//	Debug.Log("Collided with " + collider.tag);
-		//}
-	}
+        else
+        {
+            Debug.Log("Collided with " + collider.tag);
+        }
+    }
 
 	void RotateDockedShip ()
 	{
@@ -252,6 +255,12 @@ public class ShipScript : MonoBehaviour
                 //refill fuel
                 currentFuel = MaxFuel;
                 fuelBar.value = MaxFuel;
+            }
+
+            //Quit to start screen
+            if (Input.GetButton("Quit"))
+            {
+                SceneManager.LoadScene("Start Scene");
             }
         }        
     }
@@ -353,8 +362,34 @@ public class ShipScript : MonoBehaviour
 		state_predict_dot_force.y = 0.0f;
 		state_predict_dot_force.z = 0.0f;
 	}
+    
+    //Check Loss Condition
+    void OutOfBounds()
+    {
+        //go through all the game objects and get the min and max bounds -- done in ObjectGeneratorScript
+        //add/subtract 50 from each of those and set that as the bounds --done in start
 
-	void FixedUpdate ()
+        if(transform.position.x < sceneBounds.min.x || transform.position.z < sceneBounds.min.z ||
+           transform.position.x > sceneBounds.max.x || transform.position.z > sceneBounds.max.z)
+        {
+            //reset level
+            print("out of bounds");
+            gms.StartCoroutine("GameOverandReset");
+        }
+    }
+    
+    //Check Loss Condition
+    void OutOfFuel()
+    {
+        if(currentFuel <= 0.05f)
+        {
+            //reset level
+            print("out of fuel");
+            gms.StartCoroutine("GameOverandReset");
+        }
+    }
+
+    void FixedUpdate ()
 	{
         prevPosition = transform.position;
 		resetValuesEveryTimestep ();
@@ -383,5 +418,37 @@ public class ShipScript : MonoBehaviour
         fixPositionalHeight.x = transform.position.x;
         fixPositionalHeight.z = transform.position.z;
         transform.position = fixPositionalHeight;
+
+        //Things to be done once
+        count++;
+        if(flag_doOnce && count > 100)
+        {
+            flag_doOnce = false;
+
+            //get scene bounds and add offsets to it
+            Vector3 min = new Vector3(-50, 0, -50);
+            Vector3 max = new Vector3(50, 0, 50);
+
+            min.x += ogs.sceneBounds.min.x;
+            min.y = ogs.sceneBounds.min.y;
+            min.z += ogs.sceneBounds.min.z;
+
+            max.x += ogs.sceneBounds.max.x;
+            max.y += ogs.sceneBounds.max.y;
+            max.z += ogs.sceneBounds.max.z;
+
+            sceneBounds.SetMinMax(min, max);
+
+            print("ogs " + sceneBounds.min + " " + sceneBounds.max);
+        }
+
+        //Check for gameOver State
+        OutOfFuel();
+
+        if(!flag_doOnce)
+        {
+            //bounds haven't been set if it doesnt enter this
+            OutOfBounds();
+        }        
     }
 }

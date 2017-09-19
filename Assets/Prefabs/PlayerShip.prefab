@@ -129,15 +129,15 @@ MonoBehaviour:
   mass: 1
   currentFuel: 0
   MaxFuel: 1000
-  thrustFuelUsed: 5
-  rotationFuelUsed: 1
+  thrustFuelUsed: 1
+  rotationFuelUsed: 0.2
   relaunchSpeed: 700
   dT: 0.001
-  minVelocity: {x: -50000, y: -0.5, z: -50000}
-  maxVelocity: {x: 50000, y: 2.07, z: 50000}
+  minVelocity: {x: -5000, y: -0.5, z: -5000}
+  maxVelocity: {x: 5000, y: 2.07, z: 5000}
   force: {x: 0, y: 0, z: 0}
   dockingRotationSpeed: 0
   orbitcenter: {x: 0, y: 0, z: 0}
-  thrusterForceMagnitude: 500
+  thrusterForceMagnitude: 2500
   rotationSpeed: 3
   Explosion: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b, type: 2}
