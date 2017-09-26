@@ -83,7 +83,7 @@ public class GamePlayManagerScript : MonoBehaviour
         else
         {
             print("No more Levels :(");
-            PlayerPrefs.SetInt("Level", 0);
+            PlayerPrefs.SetInt("Level", scenario);
             SceneManager.LoadScene("Start Scene");
         }
     }
